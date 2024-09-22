@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Werewolf Board Game</title>
+  <link rel="stylesheet" href="werewoft.css">
+</head>
+<body>
+<header> 
+<a href="lobby_game.html"style="text-decoration: none; color: white; font-size: 25px; margin-left 20px;"><-Back</a>
+</header>
+    <div id="game-container">
+      <h1>Werewolf Board Game</h1>
+      <h2>หมาป่าหลอกก ชาวบ้านหลอนนน</h2>
+      <div id="player-list">
+        <!-- Player cards will be displayed here -->
+      </div>
+      <button onclick="startGame()" class="button">Start Game</button>
+      <button onclick="displayPlayercardFormod()" class="button">Show Card For Mod</button>
+      <button onclick="startVotingPhase()" class="button">Mark Dead Phase</button>
+      <button onclick="endVotingPhase()" class="button">End Mark Dead Phase</button>
+      <button onclick="RestartGame()" class="button">Restart</button>
+      <div class="grid">
+        <div class="item">
+          <div class="Note_box">
+            <label>Note</label>
+            <input id ="Note">
+            <button id="My_note" class="but">Save</button>
+            <h2 id ="Shownote" class="note"></h2>
+          </div>
+        </div> 
+        <div class="result_box">
+          <h1 id="result"></h1>
+        </div>
+        <div class="item"> 
+          <div class="history_box">
+            <h1 id="history" class="dead"></h1>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src = "werewoftbeta.js" ></script>
+</body>
+</html>

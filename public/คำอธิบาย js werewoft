@@ -1,0 +1,179 @@
+if (member == 5){
+    // Define roles for the Werewolf game
+    var player = 5
+    const roles = ['Villager-blue', 'Villager-blue', 'Werewolf-red', 'Seer-blue','Bodyguard-blue'];
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+      }
+      
+      // Function to start the game
+      function startGame() {
+        players = []; // Reset players array
+      
+        // Add players to the game (for simplicity, let's assume 5 players)
+        for (let i = 1; i <= member; i++) {
+          var name_player = prompt("ชื่อ")
+          players.push({ id: name_player, role: '' });
+        }
+      
+        // Shuffle the roles and assign them to players
+        shuffleArray(roles);
+        players.forEach((player, index) => {
+          player.role = roles[index];
+        });
+      
+        // Display player cards
+        displayPlayerCards();
+      
+        // Other game initialization logic can go here
+      }
+      function displayPlayercardFormod(){
+        const playerListContainer = document.getElementById('player-list');
+        playerListContainer.innerHTML = '';
+        players.forEach(player => {
+          const playerCard = document.createElement('div');
+          playerCard.classList.add('player-card');
+          playerCard.textContent = `Player ${player.id} - ${player.role}`;
+          playerCard.addEventListener('click', () => revealRole(player.id));
+          playerListContainer.appendChild(playerCard);
+        });
+      }
+      
+      function displayPlayerCards() {
+        const playerListContainer = document.getElementById('player-list');
+        playerListContainer.innerHTML = '';
+      
+        players.forEach(player => {
+          const playerCard = document.createElement('div');
+          playerCard.classList.add('player-card');
+          playerCard.textContent = `Player ${player.id}`;
+          playerCard.addEventListener('click', () => revealRole(player.id));
+          playerListContainer.appendChild(playerCard);
+        });
+      }
+      
+      // Function to reveal the role of a player
+      function revealRole(playerId) {
+        const player = players.find(p => p.id === playerId);
+        alert(`${player.id} เป็น ${player.role}`);
+      }
+      //----------------------------------------------------------------------
+      let votingPhase = false; // Flag to indicate if it's the voting phase
+
+      // Function to start the voting phase
+      function startVotingPhase() {
+        if (votingPhase) {
+          alert('พร้อมสำหรับการโหวต');
+          return;
+        }
+      
+        // Check if all players have roles assigned
+        if (players.some(player => player.role === '')) {
+          alert('Roles have not been assigned to all players. Start the game first.');
+          return;
+        }
+      
+        // Set the voting phase flag to true
+        votingPhase = true;
+
+
+        // Reset vote counts for all players
+        players.forEach(player => {
+          player.votes = 0;
+        });
+        // Display a message to indicate the start of the voting phase
+        alert('โปรดพิจารณาดูดีๆก่อนโหวตเพื่อนออกนะ');
+      }
+      
+      // Function to vote for a player
+      function voteForPlayer(playerId) {
+        if (!votingPhase) {
+          alert('It\'s not the voting phase yet!');
+          return;
+        }
+      
+        const votedPlayer = players.find(player => player.id === playerId);
+
+        // Increment the vote count for the voted player
+        votedPlayer.votes++;
+      
+        
+        // Display a message to indicate the voted player
+        
+        alert(`${votedPlayer.id} (${votedPlayer.role})ถูกโหวตออก`);
+        // Update the UI
+
+        changeCardColor(playerId);
+
+        updatePlayerCards();
+
+        // Check if the voted player has received enough votes to be eliminated
+        checkEliminationStatus();
+      }
+      
+      function changeCardColor(playerId) {
+        const playerCard = document.getElementById(`player-${playerId}`);
+        playerCard.style.backgroundColor = 'red';
+        playerCard.style.color = 'white';
+      }
+      function checkEliminationStatus() {
+        const maxVotesPlayer = players.reduce((maxPlayer, currentPlayer) =>
+          currentPlayer.votes > maxPlayer.votes ? currentPlayer : maxPlayer
+        );
+      
+        // Set a threshold (for simplicity, using half of the total players)
+        const eliminationThreshold = Math.ceil(players.length / 2);
+      
+        if (maxVotesPlayer.votes >= eliminationThreshold) {
+          // Mark the player with the maximum votes as dead
+          markPlayerAsDead(maxVotesPlayer);
+      
+          // End the voting phase
+          endVotingPhase();
+        }
+      }
+
+      // Function to end the voting phase
+      function endVotingPhase() {
+      // Set the voting phase flag to false
+      votingPhase = false;
+
+      // Notify the players that the voting phase has ended
+      alert('การโหวตได้สิ้นสุดลง');
+      
+      }
+      // Modify the revealRole function to include voting logic
+      function revealRole(playerId) {
+        if (votingPhase) {
+          voteForPlayer(playerId);
+        } else {
+          const player = players.find(p => p.id === playerId);
+          alert(`${player.id} is a ${player.role}`); 
+        }
+      }
+      // Function to mark a player as dead
+      function markPlayerAsDead(player) {
+      player.isAlive = false;
+
+      // Notify the player about their elimination
+      alert(`Player ${player.id} (${player.role}) has been eliminated.`);
+
+      // Update the UI
+      updatePlayerCards();
+      function updatePlayerCards() {
+        players.forEach(player => {
+          const playerCard = document.getElementById(`player-${player.id}`);
+          
+          // Update the player card based on their state (alive or dead)
+          if (!player.isAlive) {
+            playerCard.classList.add('dead');
+          } else {
+            playerCard.classList.remove('dead');
+          }
+        });
+      }
+  }
+}
